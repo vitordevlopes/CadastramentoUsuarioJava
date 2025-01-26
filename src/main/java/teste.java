@@ -8,11 +8,16 @@ public class teste {
 
         File diretorio = new File("C:\\Users\\vitor\\OneDrive\\Documentos\\SistemaCadastroJava\\src\\main\\java\\com\\vitor\\arquivo\\cadastros");
 
-        List<String> lista = Arrays.asList(diretorio.list());
 
-        lista.forEach(System.out::println);
+        File[] arquivos = diretorio.listFiles();
 
-        System.out.println(lista.size());
+        System.out.println(Arrays.toString(arquivos));
+
+       List<File> teste =  Arrays.stream(arquivos).toList();
+
+       teste.forEach(System.out::println);
+
+
 
     }
 
