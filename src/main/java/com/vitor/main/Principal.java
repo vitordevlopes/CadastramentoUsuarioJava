@@ -4,10 +4,14 @@ import com.vitor.usuario.Usuario;
 
 import java.io.*;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
 
 public class Principal {
+
+    private final String arquivoPerguntas = "C:\\Users\\vitor\\OneDrive\\Documentos\\SistemaCadastroJava" +
+            "\\src\\main\\java\\com\\vitor\\arquivo/formulario/formulario.txt";
 
     Scanner scanner = new Scanner(System.in);
 
@@ -21,17 +25,22 @@ public class Principal {
                 ******************************************
                 """);
 
-        try {
-            FileReader file = new FileReader("C:\\Users\\vitor\\OneDrive\\Documentos\\SistemaCadastroJava\\src\\main\\java\\com\\vitor\\arquivo/formulario.txt");
 
-            BufferedReader leitor = new BufferedReader(file);
+        FileReader file = null;
+        try {
+            file = new FileReader(arquivoPerguntas);
+        } catch (FileNotFoundException e) {
+            System.out.println("Arquivo não encontrado");
+        }
+
+        BufferedReader leitor = new BufferedReader(file);
 
             List<String> perguntas = new ArrayList<>();
 
            perguntas = leitor.lines().toList();
 
             System.out.println(perguntas.getFirst());
-             String nome = scanner.nextLine();
+             String nome = scanner.nextLine().trim();
 
             System.out.println(perguntas.get(1));
             String email = scanner.nextLine();
@@ -46,20 +55,47 @@ public class Principal {
 
             System.out.println(usuario);
 
-            int contadorUsuario = 0;
-            contadorUsuario += 1;
+            criarArquivoComDadosUsuario(nome, usuario);
 
-            FileWriter arquivo = new FileWriter("C:\\Users\\vitor\\OneDrive\\" +
-                    "Documentos\\SistemaCadastroJava\\src\\main\\java\\com\\vitor\\arquivo/" +
-                    contadorUsuario + "-" + nome.toUpperCase() + ".txt");
 
-            PrintWriter gravadorArquivo = new PrintWriter()
+    }
 
-        } catch (FileNotFoundException e) {
-            System.out.println("Arquivo não encontrado!");
-        } catch (IOException e) {
-            System.out.println("Erro na criação do arquivo com os dados do usuário.");
+    public int definirIndiceArquivo() {
+
+        File diretorio = new File("C:\\Users\\vitor\\OneDrive\\Documentos\\SistemaCadastroJava\\src\\main\\java\\com\\vitor\\arquivo\\cadastros");
+
+        List<String> lista = Arrays.asList(diretorio.list());
+
+        int contadorUsuario = 0;
+
+        List<String> listaArquivos = Arrays.asList(diretorio.list());
+
+        if (listaArquivos.size() == 0) {
+           return contadorUsuario = 1;
+        } else {
+          return  contadorUsuario = listaArquivos.size() + 1;
         }
 
     }
+
+    public void criarArquivoComDadosUsuario(String nome, Usuario usuario) {
+
+        String arquivoDadosUsuario = "C:\\Users\\vitor\\OneDrive\\" +
+                "Documentos\\SistemaCadastroJava\\src\\main\\java\\com\\vitor\\arquivo/cadastros/" +
+                definirIndiceArquivo() + "-" + nome.toUpperCase().replace(" ", "") + ".txt";
+
+        try {
+            FileWriter arquivo = new FileWriter(arquivoDadosUsuario);
+            arquivo.write(usuario.getNome() + "\n" + usuario.getEmail() + "\n" +
+                    usuario.getIdade() + "\n" + usuario.getAltura() + "\n");
+            arquivo.close();
+
+        } catch (IOException ex) {
+            System.out.println("Erro");
+        }
+
+
+
+    }
+
 }
