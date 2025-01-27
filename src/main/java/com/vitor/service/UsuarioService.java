@@ -3,7 +3,6 @@ package com.vitor.service;
 import com.vitor.usuario.Usuario;
 
 import java.io.*;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
@@ -12,7 +11,10 @@ public class UsuarioService {
 
     private final String arquivoPerguntas = "C:\\Users\\vitor\\OneDrive\\Documentos\\SistemaCadastroJava" +
             "\\src\\main\\java\\com\\vitor\\arquivo/formulario/formulario.txt";
+
     private Scanner scanner = new Scanner(System.in);
+
+    private final String caminhoDiretorioCadastro = "C:\\Users\\vitor\\OneDrive\\Documentos\\SistemaCadastroJava\\src\\main\\java\\com\\vitor\\arquivo\\cadastros";
 
     public void cadastrarUsuario() {
         FileReader file = null;
@@ -51,8 +53,6 @@ public class UsuarioService {
 
         File diretorio = new File("C:\\Users\\vitor\\OneDrive\\Documentos\\SistemaCadastroJava\\src\\main\\java\\com\\vitor\\arquivo\\cadastros");
 
-        List<String> lista = Arrays.asList(diretorio.list());
-
         int contadorUsuario = 0;
 
         List<String> listaArquivos = Arrays.asList(diretorio.list());
@@ -87,12 +87,11 @@ public class UsuarioService {
 
     public void listarUsuarios() {
 
-        File diretorio = new File("C:\\Users\\vitor\\OneDrive\\Documentos\\SistemaCadastroJava\\src\\main\\java\\com\\vitor\\arquivo\\cadastros");
+        File diretorio = new File(caminhoDiretorioCadastro);
 
         File[] arquivos = diretorio.listFiles();
 
         List<File> listaArquivos = Arrays.stream(arquivos).toList();
-
 
         for (File listaArquivo : listaArquivos) {
 
@@ -115,4 +114,49 @@ public class UsuarioService {
         }
 
     }
+
+    public void adicionarNovaPergunta() {
+
+        System.out.println("Adicione uma nova pergunta: ");
+        String pergunta = scanner.nextLine();
+
+
+
+        File file = new File(arquivoPerguntas);
+
+       Integer qntdPerguntas = descobrirQuantidadePerguntas();
+
+        try {
+            FileWriter arquivo = new FileWriter(file, true);
+            arquivo.write("\n" + (qntdPerguntas + 1) + " - " + pergunta);
+            arquivo.close();
+        } catch (IOException e) {
+            System.out.println(e.getMessage());
+        }
+
+    }
+
+    public Integer descobrirQuantidadePerguntas() {
+        File diretorio = new File(arquivoPerguntas);
+
+        Integer qntdPerguntas = 0;
+
+        try {
+            FileReader fileReader = new FileReader(arquivoPerguntas);
+            BufferedReader bufferedReader = new BufferedReader(fileReader);
+           List<String> listaPerguntas = bufferedReader.lines().toList();
+
+            for (String pergunta : listaPerguntas) {
+                qntdPerguntas++;
+            }
+
+            return qntdPerguntas;
+
+        } catch (FileNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+
+
+    }
+
 }

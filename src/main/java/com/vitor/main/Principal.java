@@ -38,8 +38,8 @@ public class Principal {
                 usuarioService.cadastrarUsuario();
             case 2:
                 usuarioService.listarUsuarios();
-//            case 3:
-//                cadastrarNovaPergunta();
+            case 3:
+                usuarioService.adicionarNovaPergunta();
 //            case 4:
 //                deleterPergunta();
 //            case 5:
