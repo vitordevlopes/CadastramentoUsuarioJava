@@ -2,8 +2,6 @@ package com.vitor;
 
 import com.vitor.main.Principal;
 
-import java.util.Scanner;
-
 public class SistemaCadastroJava {
 
 

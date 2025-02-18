@@ -3,11 +3,7 @@ package com.vitor.service;
 import com.vitor.usuario.Usuario;
 
 import java.io.*;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Scanner;
-import java.util.stream.Collectors;
+import java.util.*;
 
 public class UsuarioService {
 
@@ -35,14 +31,35 @@ public class UsuarioService {
         System.out.println(perguntas.getFirst());
         String nome = scanner.nextLine().trim();
 
+        if (nome.length() < 10) {
+            throw new IllegalArgumentException("O nome deve ter pelo menos 10 caracteres");
+        }
+
+
         System.out.println(perguntas.get(1));
         String email = scanner.nextLine();
+
+        if (!email.contains("@")) {
+            throw new IllegalArgumentException("O email deve conter o símbolo '@' ");
+        }
 
         System.out.println(perguntas.get(2));
         Integer idade = scanner.nextInt();
 
+        if (idade < 18) {
+            throw new IllegalArgumentException("O usuário deve ter 18 anos ou mais");
+        }
+
         System.out.println(perguntas.get(3));
-        Double altura = scanner.nextDouble();
+        Double altura = null;
+        while (altura == null) {
+            try {
+                altura = Double.parseDouble(scanner.nextLine().replace(",", "."));
+            } catch (NumberFormatException ex) {
+                System.out.println("Erro: Use ponto (.) para separar decimais. Tente novamente:");
+            }
+        }
+
 
         Usuario usuario = new Usuario(nome, email, idade, altura);
 
@@ -55,14 +72,12 @@ public class UsuarioService {
 
         File diretorio = new File("C:\\Users\\vitor\\OneDrive\\Documentos\\SistemaCadastroJava\\src\\main\\java\\com\\vitor\\arquivo\\cadastros");
 
-        int contadorUsuario = 0;
-
         List<String> listaArquivos = Arrays.asList(diretorio.list());
 
-        if (listaArquivos.size() == 0) {
-            return contadorUsuario = 1;
+        if (listaArquivos.isEmpty()) {
+            return 1;
         } else {
-            return  contadorUsuario = listaArquivos.size() + 1;
+            return listaArquivos.size() + 1;
         }
 
     }
@@ -139,7 +154,6 @@ public class UsuarioService {
     }
 
     public Integer descobrirQuantidadePerguntas() {
-        File diretorio = new File(arquivoPerguntas);
 
         Integer qntdPerguntas = 0;
 
