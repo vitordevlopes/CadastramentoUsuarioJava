@@ -258,20 +258,19 @@ public class UsuarioService {
 
             }
 
-            listaNomes.sort(String::compareToIgnoreCase); // estudar essa ordenação
-
-            System.out.println(listaNomes);
-
-            System.out.println("Usuários cadastrados com esse nome:");
-
             if (listaNomes.isEmpty()) {
-                System.out.println("Usuário não encontrado.");
+                System.out.println("Usuário não encontrado");
             } else {
-                for (String nomeUsuario : listaNomes) {
-                    System.out.println(nomeUsuario);
-                    System.out.println("*************************");
-                }
+                listaNomes.stream()
+                        .sorted(String::compareToIgnoreCase) // Ordena alfabeticamente
+                        .limit(2) // Limita a 2 usuários
+                        .forEach(usuario -> {
+                            System.out.println(usuario);
+                            System.out.println("***************************");
+                        });
             }
+
+
 
 
 
