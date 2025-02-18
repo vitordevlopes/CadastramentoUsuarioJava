@@ -36,14 +36,19 @@ public class Principal {
         switch (opcao) {
             case 1:
                 usuarioService.cadastrarUsuario();
+                break;
             case 2:
                 usuarioService.listarUsuarios();
+                break;
             case 3:
                 usuarioService.adicionarNovaPergunta();
-//            case 4:
-//                deleterPergunta();
-//            case 5:
-//                pesquisarUsuarioPorNomeIdadeOuEmail();
+                break;
+            case 4:
+                usuarioService.deletarPergunta();
+                break;
+            case 5:
+                usuarioService.pesquisarUsuarioPorNome();
+                break;
         }
 
 

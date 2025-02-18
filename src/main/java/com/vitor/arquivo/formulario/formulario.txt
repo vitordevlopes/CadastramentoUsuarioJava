@@ -3,4 +3,10 @@
 3 - Qual sua idade?
 4 - Qual sua altura?
 5 - Qual sua cidade natal?
-6 - Qual seu signo?
+
+6 - 
+8 - 
+9 - 
+10 - 
+11 - 
+12 - 

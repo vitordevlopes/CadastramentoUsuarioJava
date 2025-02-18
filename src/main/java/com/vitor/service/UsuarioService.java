@@ -3,9 +3,11 @@ package com.vitor.service;
 import com.vitor.usuario.Usuario;
 
 import java.io.*;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
+import java.util.stream.Collectors;
 
 public class UsuarioService {
 
@@ -159,4 +161,125 @@ public class UsuarioService {
 
     }
 
+    public void deletarPergunta() {
+
+
+        System.out.println("Selecione a pergunta que será deletada: ");
+        int linhaEscolhida = scanner.nextInt();
+        scanner.nextLine();
+
+        if (linhaEscolhida <= 4) {
+            System.out.println("A pergunta precisa ser maior que 4!");
+        } else {
+            File arquivoOriginal = new File(arquivoPerguntas);
+            File arquivoTemporario = new File("C:\\Users\\vitor\\OneDrive\\Documentos\\SistemaCadastroJava" +
+                    "\\src\\main\\java\\com\\vitor\\arquivo/formulario/arquivo_temp.txt");
+
+            try (BufferedReader reader = new BufferedReader(new FileReader(arquivoOriginal));
+                 BufferedWriter writer = new BufferedWriter(new FileWriter(arquivoTemporario))) {
+
+                String linhaAtual;
+                int numeroLinha = 1;
+
+                // Leia e escreva as linhas
+                while ((linhaAtual = reader.readLine()) != null) {
+                    if (numeroLinha != linhaEscolhida) {
+                        writer.write(linhaAtual);
+                        writer.newLine();
+                    }
+                    numeroLinha++;
+                }
+            } catch (IOException e) {
+                System.out.println("Erro ao processar o arquivo: " + e.getMessage());
+                return;
+            }
+
+            // Verifique a exclusão do arquivo original
+            if (arquivoOriginal.delete()) {
+                // Verifique o renomeio do arquivo temporário
+                if (arquivoTemporario.renameTo(arquivoOriginal)) {
+                    System.out.println("Linha " + linhaEscolhida + " deletada com sucesso!");
+                } else {
+                    System.out.println("Erro ao renomear o arquivo temporário.");
+                }
+            } else {
+                System.out.println("Erro ao deletar o arquivo original.");
+            }
+
+//            O Arquivo Temporário Torna-se o Original: Após a renomeação, o arquivo temporário não existe mais sob o
+//           nome "temporário". Ele agora tem o mesmo nome do arquivo original.
+
+        }
+
+    }
+
+    public void pesquisarUsuarioPorNome() {
+
+        System.out.println("Digite um nome: ");
+       var nome =  scanner.nextLine().toLowerCase();
+
+        File diretorio = new File(caminhoDiretorioCadastro);
+
+        File[] arquivos = diretorio.listFiles();
+
+
+
+        if (arquivos != null) {
+
+            List<File> listaArquivos = Arrays.stream(arquivos).toList();
+
+            List<String> listaNomes = new ArrayList<>();
+
+            for (File arquivo : listaArquivos) {
+
+                try {
+                    BufferedReader leitor = new BufferedReader(new FileReader(arquivo));
+
+                    var primeiraLinha = leitor.readLine();
+                    String dadosCompletos = primeiraLinha;
+
+
+                    if (primeiraLinha.toLowerCase().contains(nome)) {
+
+                        String linha;
+                        while ((linha = leitor.readLine()) != null) {
+                            dadosCompletos += "\n" + linha;
+                        }
+
+                        listaNomes.add(dadosCompletos);
+
+                    }
+
+                } catch (FileNotFoundException e) {
+                    System.out.println("Erro");
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+
+            }
+
+            listaNomes.sort(String::compareToIgnoreCase); // estudar essa ordenação
+
+            System.out.println(listaNomes);
+
+            System.out.println("Usuários cadastrados com esse nome:");
+
+            if (listaNomes.isEmpty()) {
+                System.out.println("Usuário não encontrado.");
+            } else {
+                for (String nomeUsuario : listaNomes) {
+                    System.out.println(nomeUsuario);
+                    System.out.println("*************************");
+                }
+            }
+
+
+
+
+        }
+
+
+
+
+    }
 }
